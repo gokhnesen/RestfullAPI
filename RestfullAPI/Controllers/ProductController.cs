@@ -1,117 +1,69 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
+using RestfullAPI.Interfaces;
 
 namespace RestfullAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class ProductController : ControllerBase
     {
-        private static List<Product> products = new List<Product>
+        private readonly IProductRepository _productRepository;
+        public ProductController(IProductRepository productRepository)
         {
-                new Product
-                {
-                    Id = 1,
-                    Name="Samsung S22",
-                    Description="Phone".ToLower(),
-                    Price=20000
-                },
-                new Product
-                {
-                    Id = 2,
-                    Name="iPhone 14",
-                    Description="Phone".ToLower(),
-                    Price=30000
-                },
-        };
-
-
+            _productRepository = productRepository;
+        }
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            if(products == null)
-            {
-                return StatusCode(500, "Internal server error");
-            }
-    
+            var products = await _productRepository.GetProductsAsync();
             return Ok(products);
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetProductById([FromRoute]int productId)
         {
-            var product = products.Find(x=>x.Id == id);
+            var product = await _productRepository.GetProductByIdAsync(productId);
             if(product == null)
             {
-                return StatusCode(404,"Product not found");
+                return NotFound();
             }
             return Ok(product);
         }
-      
-        [HttpGet("Description")]
-       
-        public async Task<ActionResult<Product>> GetProductByDescription(string description)
+
+        [HttpGet("description")]
+        public async Task<IActionResult> GetProductByDescription([FromQuery]string description)
         {
-            var product = products.Find(x => x.Description == description);
+            var product = await _productRepository.GetProductByDescriptionAsync(description);
             if (product == null)
             {
-                return StatusCode(404, "Product not found");
+                return NotFound();
             }
             return Ok(product);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Product>>> AddProduct(Product product)
+        [HttpPost("add")]
+        public async Task<IActionResult> AddProducts([FromBody]Product request)
         {
-            products.Add(product);
-            return Ok(products);
+            var product = await _productRepository.AddProduct(request);
+            return CreatedAtAction(nameof(GetProductById), new { productId = product.Id }, product);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<Product>>> UpdateProduct([FromBody] Product request)
+        [HttpPut("update/{productId}")]
+        public async Task<ActionResult> UpdateProducts([FromBody]Product request,int productId)
         {
-            var product = products.Find(x => x.Id == request.Id);
-            if (product == null)
-            {
-                return StatusCode(400,"Product not found");
-            }
-            product.Name = request.Name;
-            product.Description = request.Description;
-            product.Price = request.Price;
+            var product = await _productRepository.UpdateProduct(productId,request);
             return Ok(product);
-
         }
 
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<List<Product>>> UpdateProductPatch(int id,[FromBody]JsonPatchDocument<Product> productUpdate)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteProducts(int productId)
         {
-            var product = products.FirstOrDefault(x => x.Id == id);
-            if (product == null)
-            {
-                return StatusCode(400, "Product not found");
-            }
-            productUpdate.ApplyTo(product,ModelState);
-           
-
+            var product = await _productRepository.DeleteProduct(productId);
             return Ok(product);
-
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
-        {
-            var product = products.Find(x => x.Id == id);
-            if (product == null)
-            {
-                return StatusCode(400, "Product not found");
-            }
-            products.Remove(product);
-            return Ok(product);
-
-
-        }
     }
 }
