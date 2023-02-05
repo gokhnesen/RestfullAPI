@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Interfaces;
+using RestfullAPI.Middlewares;
 using RestfullAPI.Repositories;
 
 namespace API
@@ -37,7 +39,14 @@ namespace API
             });
 
             services.AddDbContext<ProductContext>(options => options.UseInMemoryDatabase(databaseName: "ProductDb"));
-            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductRepository,ProductRepository>();
+            var serviceProvider=services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<GlobalExceptionHandlingMiddleware>>();
+            services.AddSingleton(typeof(ILogger), logger);
+            services.AddHttpLogging(httpLogging =>
+            {
+                httpLogging.LoggingFields = HttpLoggingFields.All;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,7 +57,8 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
-
+            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+            app.UseHttpLogging();
             app.UseHttpsRedirection();
 
             app.UseRouting();

@@ -17,9 +17,9 @@ namespace RestfullAPI.DbOperations.DataSeed
                 new Product()
                 {
                     Id = 1,
-                    Name="iPhone 14",
-                    Description="Phone".ToLower(),
-                    Price=20000,
+                    Name = "iPhone 14",
+                    Description = "Phone".ToLower(),
+                    Price = 20000,
 
                 },
                 new Product()
@@ -32,14 +32,21 @@ namespace RestfullAPI.DbOperations.DataSeed
                 },
                 new Product()
                 {
-                   Id = 3,
-                   Name = "Asus ROG",
-                   Description = "Laptop".ToLower(),
-                   Price = 25000,
+                    Id = 3,
+                    Name = "Asus ROG",
+                    Description = "Laptop".ToLower(),
+                    Price = 25000,
 
                 }
 
-
+                );
+                context.Users.Add(
+                new User()
+                {
+                    Id=1,
+                    Username = "admin",
+                    Password = "12345",
+                }
                 );
                 context.SaveChanges();
             }

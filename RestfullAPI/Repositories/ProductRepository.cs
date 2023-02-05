@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 using RestfullAPI.Interfaces;
+using System.Net;
 
 namespace RestfullAPI.Repositories
 {
@@ -37,17 +38,19 @@ namespace RestfullAPI.Repositories
         public async Task<Product> GetProductByDescriptionAsync(string description)
         {
             return await _context.Products.FirstOrDefaultAsync(x=>x.Description == description);
+          
         }
 
         public async Task<Product> GetProductByIdAsync(int productId)
         {
             return await _context.Products.FindAsync(productId);
+            
         }
 
         public  async Task<List<Product>> GetProductsAsync()
         {
             return await _context.Products.ToListAsync();
-            
+
         }
 
         public async Task<Product> UpdateProduct(int productId, Product request)
