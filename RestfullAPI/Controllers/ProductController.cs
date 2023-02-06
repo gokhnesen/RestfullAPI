@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 using RestfullAPI.Interfaces;
+using RestfullAPI.ProductOperations.CreateProduct;
+using RestfullAPI.ProductOperations.GetProduct;
+using static RestfullAPI.ProductOperations.CreateProduct.CreateProductCommand;
 
 namespace RestfullAPI.Controllers
 {
@@ -11,22 +14,21 @@ namespace RestfullAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly ProductContext _context;
         private readonly ILogger<ProductController> _logger;
-        public ProductController(IProductRepository productRepository, ILogger<ProductController> logger)
+        public ProductController(ProductContext context, ILogger<ProductController> logger, IProductRepository productRepository)
         {
-            _productRepository = productRepository;
+            _context = context;
             _logger = logger;
+            _productRepository = productRepository;
         }
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public  IActionResult GetProducts()
         {
             _logger.LogInformation("Getting all products");
-            var products = await _productRepository.GetProductsAsync();
-            if(products == null)
-            {
-                return StatusCode(500, "Internal Server Error");
-            }
-            return Ok(products);
+            GetProductQuery query =  new GetProductQuery(_context); // View model kullanımı
+            var result = query.Handle();
+            return Ok(result);
         }
 
         [HttpGet("{productId}")]
@@ -55,16 +57,30 @@ namespace RestfullAPI.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddProducts([FromBody]Product request)
+        public  IActionResult AddProducts([FromBody]CreateProductModel request)
         {
             _logger.LogInformation("Creating product");
+            CreateProductCommand command = new CreateProductCommand(_context);
 
-            var product = await _productRepository.AddProduct(request);
-            if(product == null)
+            try
             {
-                return StatusCode(400,"Bad Request");
+                command.Model = request;
+                command.Handle();
             }
-            return CreatedAtAction(nameof(GetProductById), new { productId = product.Id }, product);
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            //var product = await _productRepository.AddProduct(request);
+            //if(product == null)
+            //{
+            //    return StatusCode(400,"Bad Request");
+            //}
+            //return CreatedAtAction(nameof(GetProductById), new { productId = product.Id }, product);
+
+           
+            return Ok();
         }
 
         [HttpPut("update/{productId}")]
