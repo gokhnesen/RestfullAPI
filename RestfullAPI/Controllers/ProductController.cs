@@ -4,7 +4,9 @@ using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 using RestfullAPI.Interfaces;
 using RestfullAPI.ProductOperations.CreateProduct;
+using RestfullAPI.ProductOperations.DeleteProduct;
 using RestfullAPI.ProductOperations.GetProduct;
+using RestfullAPI.ProductOperations.UpdateProduct;
 using static RestfullAPI.ProductOperations.CreateProduct.CreateProductCommand;
 
 namespace RestfullAPI.Controllers
@@ -32,16 +34,29 @@ namespace RestfullAPI.Controllers
         }
 
         [HttpGet("{productId}")]
-        public async Task<IActionResult> GetProductById([FromRoute]int productId)
+        public  IActionResult GetProductById([FromRoute]int productId)
         {
+            ProductDetailViewModel result;
             _logger.LogInformation("Getting product");
-            var product = await _productRepository.GetProductByIdAsync(productId);
-            if(product == null)
+            //var product = await _productRepository.GetProductByIdAsync(productId);
+            //if(product == null)
+            //{
+            //    _logger.LogWarning($"Product id {productId} not found");
+            //    return StatusCode(404, "Product not found");
+            //}
+            try
             {
-                _logger.LogWarning($"Product id {productId} not found");
-                return StatusCode(404, "Product not found");
+                GetProductDetailQuery query = new GetProductDetailQuery(_context);
+                query.ProductId = productId;
+                result = query.Handle();
+
             }
-            return Ok(product);
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            return Ok(result);
         }
 
         [HttpGet("description")]
@@ -84,28 +99,60 @@ namespace RestfullAPI.Controllers
         }
 
         [HttpPut("update/{productId}")]
-        public async Task<ActionResult> UpdateProducts([FromBody]Product request,int productId)
+        public IActionResult UpdateProducts([FromBody]UpdateProductModel request,int productId)
         {
             _logger.LogInformation("Updating product");
-            var product = await _productRepository.UpdateProduct(productId,request);
-            if (product == null)
+
+            try
             {
-                return StatusCode(400, "Bad Request");
+                UpdateProductCommand command = new UpdateProductCommand(_context);
+                command.ProductId = productId;
+                command.Model = request;
+                command.Handle();
             }
-            return Ok(product);
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+         
+            return Ok(request);
+
+            //var product = await _productRepository.UpdateProduct(productId,request);
+            //if (product == null)
+            //{
+            //    return StatusCode(400, "Bad Request");
+            //}
+            //return Ok(product);
+
+
         }
 
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProducts(int productId)
         {
             _logger.LogInformation("Deleting product");
-       
-            var product = await _productRepository.DeleteProduct(productId);
-            if (product == null)
+
+            try
             {
-                return StatusCode(404, "Product not found");
+                DeleteProductCommand command = new DeleteProductCommand(_context);
+                command.ProductId = productId;
+                command.Handle();
             }
-            return Ok(product);
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            return Ok();
+        
+       
+            //var product = await _productRepository.DeleteProduct(productId);
+            //if (product == null)
+            //{
+            //    return StatusCode(404, "Product not found");
+            //}
+            //return Ok(product);
         }
 
     }
