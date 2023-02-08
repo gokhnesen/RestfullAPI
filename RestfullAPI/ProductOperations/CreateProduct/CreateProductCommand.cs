@@ -23,7 +23,6 @@ namespace RestfullAPI.ProductOperations.CreateProduct
               
             }
             product = new Product();
-            product.Id = Model.Id;
             product.Name = Model.Name;
             product.Description = Model.Description;
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
@@ -80,6 +82,8 @@ namespace RestfullAPI.Controllers
             try
             {
                 command.Model = request;
+                CreateProductValidator validator = new CreateProductValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
             }
             catch (Exception ex)
@@ -108,6 +112,8 @@ namespace RestfullAPI.Controllers
                 UpdateProductCommand command = new UpdateProductCommand(_context);
                 command.ProductId = productId;
                 command.Model = request;
+                UpdateProductValidator validator = new UpdateProductValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
             }
             catch (Exception ex)
@@ -137,6 +143,8 @@ namespace RestfullAPI.Controllers
             {
                 DeleteProductCommand command = new DeleteProductCommand(_context);
                 command.ProductId = productId;
+                DeleteProductValidator validator = new DeleteProductValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
             }
             catch (Exception ex)
