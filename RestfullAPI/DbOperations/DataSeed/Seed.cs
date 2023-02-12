@@ -7,36 +7,33 @@ namespace RestfullAPI.DbOperations.DataSeed
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context= new ProductContext(serviceProvider.GetRequiredService<DbContextOptions<ProductContext>>()))
+            using (var context= new BookStoreDbContext(serviceProvider.GetRequiredService<DbContextOptions<BookStoreDbContext>>()))
             {
-                if (context.Products.Any())
+                if (context.Books.Any())
                 {
                     return;
                 }
-                context.Products.AddRange(
-                new Product()
+                context.Books.AddRange(
+                new Books
                 {
-                    Id = 1,
-                    Name = "iPhone 14",
-                    Description = "Phone".ToLower(),
-                    Price = 20000,
-
+                    Title = "Lean Startup",
+                    GenreId = 1, 
+                    PageCount = 200,
+                    PublishDate = new DateTime(2001, 06, 12)
                 },
-                new Product()
+                new Books
                 {
-                    Id = 2,
-                    Name = "Samsung S22",
-                    Description = "Phone".ToLower(),
-                    Price = 10000,
-
+                    Title = "Herland",
+                    GenreId = 2, 
+                    PageCount = 250,
+                    PublishDate = new DateTime(2010, 05, 23)
                 },
-                new Product()
+                new Books
                 {
-                    Id = 3,
-                    Name = "Asus ROG",
-                    Description = "Laptop".ToLower(),
-                    Price = 25000,
-
+                    Title = "Dune",
+                    GenreId = 2,  
+                    PageCount = 540,
+                    PublishDate = new DateTime(2001, 12, 21)
                 }
 
                 );
@@ -47,6 +44,20 @@ namespace RestfullAPI.DbOperations.DataSeed
                     Username = "admin",
                     Password = "12345",
                 }
+                );
+                context.Genres.AddRange(
+                    new Genre()
+                    {
+                        Name = "Personal Growth"
+                    },
+                    new Genre()
+                    {
+                        Name = "Science Fiction"
+                    },
+                    new Genre()
+                    {
+                        Name = "Romance"
+                    }
                 );
                 context.SaveChanges();
             }

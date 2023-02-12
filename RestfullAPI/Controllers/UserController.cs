@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
-using RestfullAPI.Interfaces;
 
 namespace RestfullAPI.Controllers
 {
@@ -11,9 +10,9 @@ namespace RestfullAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ProductContext _context;
+        private readonly BookStoreDbContext _context;
 
-        public UserController(ProductContext context)
+        public UserController(BookStoreDbContext context)
         {
             _context = context;
         }

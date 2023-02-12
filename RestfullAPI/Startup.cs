@@ -14,9 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RestfullAPI.DbOperations;
-using RestfullAPI.Interfaces;
 using RestfullAPI.Middlewares;
-using RestfullAPI.Repositories;
+using RestfullAPI.Services;
 
 namespace API
 {
@@ -38,15 +37,14 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
 
-            services.AddDbContext<ProductContext>(options => options.UseInMemoryDatabase(databaseName: "ProductDb"));
-            services.AddTransient<IProductRepository,ProductRepository>();
+            services.AddDbContext<BookStoreDbContext>(options => options.UseInMemoryDatabase(databaseName: "BookStoreDB"));
             var serviceProvider=services.BuildServiceProvider();
-            var logger = serviceProvider.GetService<ILogger<GlobalExceptionHandlingMiddleware>>();
-            services.AddSingleton(typeof(ILogger), logger);
             services.AddHttpLogging(httpLogging =>
             {
                 httpLogging.LoggingFields = HttpLoggingFields.All;
             });
+            services.AddSingleton<ILoggerService, ConsoleLogger>();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,13 +55,13 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
-            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
             app.UseHttpLogging();
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCustomExceptionMiddle();
 
             app.UseEndpoints(endpoints =>
             {
