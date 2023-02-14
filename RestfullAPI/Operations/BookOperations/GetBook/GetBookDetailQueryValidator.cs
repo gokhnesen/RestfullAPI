@@ -2,9 +2,9 @@
 
 namespace RestfullAPI.BookOperations.Commands.GetBook
 {
-    public class GetBookQueryValidator : AbstractValidator<GetBookDetailQuery>
+    public class GetBookDetailQueryValidator : AbstractValidator<GetBookDetailQuery>
     {
-        public GetBookQueryValidator()
+        public GetBookDetailQueryValidator()
         {
             RuleFor(request => request.BookId).GreaterThan(0);
         }

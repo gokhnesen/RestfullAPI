@@ -1,28 +1,29 @@
-﻿using RestfullAPI.DbOperations;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using RestfullAPI.DbOperations;
+using RestfullAPI.Entities;
 
 namespace RestfullAPI.BookOperations.Commands.GetBook
 {
     public class GetBookDetailQuery
     {
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
         public int BookId { get; set; }
-        public GetBookDetailQuery(BookStoreDbContext context)
+        public GetBookDetailQuery(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public BookDetailViewModel Handle()
         {
-            var book = _context.Books.Where(book => book.Id == BookId).FirstOrDefault();
+            var book = _context.Books.Include(x=>x.Genre).Where(book => book.Id == BookId).FirstOrDefault();
             if (book is null)
             {
                 throw new InvalidOperationException("Kitap bulunamadı");
             }
-            BookDetailViewModel viewModel = new BookDetailViewModel();
-            viewModel.Title = book.Title;
-            viewModel.Genre = book.GenreId;
-            viewModel.PageCount = book.PageCount;
-            viewModel.PublishDate = book.PublishDate;
+            BookDetailViewModel viewModel = _mapper.Map<BookDetailViewModel>(book);
             return viewModel;
 
         }
@@ -31,7 +32,8 @@ namespace RestfullAPI.BookOperations.Commands.GetBook
     public class BookDetailViewModel
     {
         public string Title { get; set; }
-        public int Genre { get; set; }
+        public string Genre { get; set; }
+        public string Author { get; set; }
         public int PageCount { get; set; }
         public DateTime PublishDate { get; set; }
 

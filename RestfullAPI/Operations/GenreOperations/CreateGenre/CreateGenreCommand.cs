@@ -1,4 +1,5 @@
-﻿using RestfullAPI.DbOperations;
+﻿using AutoMapper;
+using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 
 namespace RestfullAPI.Operations.GenreOperations.CreateGenre
@@ -6,10 +7,12 @@ namespace RestfullAPI.Operations.GenreOperations.CreateGenre
     public class CreateGenreCommand
     {
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
         public CreateGenreModel Model { get; set; }
-        public CreateGenreCommand(BookStoreDbContext context)
+        public CreateGenreCommand(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public void Handle()
         {
@@ -18,8 +21,7 @@ namespace RestfullAPI.Operations.GenreOperations.CreateGenre
             {
                 throw new InvalidOperationException("Kitap türü mevcut");
             }
-            genre = new Genre();
-            genre.Name = Model.Name;
+            genre = _mapper.Map<Genre>(Model);
             _context.Genres.Add(genre);
             _context.SaveChanges();
         }

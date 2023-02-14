@@ -43,6 +43,7 @@ namespace API
             {
                 httpLogging.LoggingFields = HttpLoggingFields.All;
             });
+            services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<ILoggerService, ConsoleLogger>();
             
         }

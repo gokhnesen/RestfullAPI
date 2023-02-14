@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using RestfullAPI.BookOperations.Commands.CreateBook;
 using RestfullAPI.BookOperations.Commands.DeleteBook;
@@ -14,15 +15,17 @@ namespace RestfullAPI.Controllers
     public class BookController : Controller
     {
         private readonly BookStoreDbContext _context;
-        public BookController(BookStoreDbContext context)
+        private readonly IMapper _mapper;
+        public BookController(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetBooks()
         {
-            GetBooksQuery query = new GetBooksQuery(_context);
+            GetBooksQuery query = new GetBooksQuery(_context,_mapper);
             var result = query.Handle();
             return Ok(result);
         }
@@ -33,12 +36,13 @@ namespace RestfullAPI.Controllers
             BookDetailViewModel result;
     
           
-                GetBookDetailQuery query = new GetBookDetailQuery(_context);
-                query.BookId = bookId;
-                result = query.Handle();
-
-            
-      
+            GetBookDetailQuery query = new GetBookDetailQuery(_context,_mapper);
+            query.BookId = bookId;
+            GetBookDetailQueryValidator validator = new GetBookDetailQueryValidator();
+            validator.ValidateAndThrow(query);
+           
+            result = query.Handle();
+  
             return Ok(result);
         }
 
@@ -65,22 +69,19 @@ namespace RestfullAPI.Controllers
         [HttpPost("add")]
         public IActionResult AddBooks([FromBody] CreateBookModel request)
         {
-            CreateBookCommand command = new CreateBookCommand(_context);
-
-           
+            
+            
+                CreateBookCommand command = new CreateBookCommand(_context,_mapper);
                 command.Model = request;
                 CreateBookCommandValidator validator = new CreateBookCommandValidator();
                 validator.ValidateAndThrow(command);
                 command.Handle();
-       
-
-
-
-                 return Ok(request);
+      
+                return Ok(request);
         }
 
         [HttpDelete("{bookId}")]
-        public async Task<IActionResult> DeleteBooks(int bookId)
+        public async Task<IActionResult> DeleteBook(int bookId)
         {
 
            

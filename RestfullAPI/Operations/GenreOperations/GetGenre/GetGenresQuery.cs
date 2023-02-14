@@ -1,4 +1,5 @@
-﻿using RestfullAPI.BookOperations.Commands.GetBook;
+﻿using AutoMapper;
+using RestfullAPI.BookOperations.Commands.GetBook;
 using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 
@@ -7,25 +8,18 @@ namespace RestfullAPI.Operations.GenreOperations.GetGenre
     public class GetGenresQuery
     {
         private readonly BookStoreDbContext _context;
-        public GetGenresQuery(BookStoreDbContext context)
+        private readonly IMapper _mapper;
+        public GetGenresQuery(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<GenresViewModel> Handle()
         {
             var genres = _context.Genres.Where(x => x.IsActive).OrderBy(x => x.Id);
-            List<GenresViewModel> genresViewModel = new List<GenresViewModel>();
-            foreach (var genre in genres)
-            {
-                genresViewModel.Add(new GenresViewModel()
-                {
-                    Id=genre.Id,
-                    Name=genre.Name,
-                    
-
-                });
-            }
+            List<GenresViewModel> genresViewModel = _mapper.Map<List<GenresViewModel>>(genres);
+    
             return genresViewModel;
         }
     }

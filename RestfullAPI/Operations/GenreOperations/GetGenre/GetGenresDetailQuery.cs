@@ -1,15 +1,18 @@
-﻿using RestfullAPI.DbOperations;
+﻿using AutoMapper;
+using RestfullAPI.DbOperations;
 
 namespace RestfullAPI.Operations.GenreOperations.GetGenre
 {
     public class GetGenresDetailQuery
     {
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
         public int GenreId { get; set; }
 
-        public GetGenresDetailQuery(BookStoreDbContext context)
+        public GetGenresDetailQuery(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public GenresDetailViewModel Handle()
@@ -19,8 +22,7 @@ namespace RestfullAPI.Operations.GenreOperations.GetGenre
             {
                 throw new InvalidOperationException("tür bulunamadı");
             }
-            GenresDetailViewModel vm = new GenresDetailViewModel();
-            vm.Name = genre.Name;
+            GenresDetailViewModel vm = _mapper.Map<GenresDetailViewModel>(genre);
         
             return vm;
         }

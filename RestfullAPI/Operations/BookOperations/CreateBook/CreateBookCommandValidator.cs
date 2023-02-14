@@ -8,8 +8,9 @@ namespace RestfullAPI.BookOperations.Commands.CreateBook
         {
             RuleFor(request => request.Model.Title).NotEmpty().MinimumLength(3).MaximumLength(10);
             RuleFor(request => request.Model.PageCount).NotEmpty().GreaterThan(0);
-            RuleFor(request => request.Model.PublishDate).NotEmpty().LessThan(DateTime.Now.Date);
+            RuleFor(request => request.Model.PublishDate).NotEmpty();
             RuleFor(request => request.Model.GenreId).GreaterThan(0);
+            RuleFor(request => request.Model.AuthorId).GreaterThan(0);
 
 
 

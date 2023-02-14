@@ -1,4 +1,5 @@
-﻿using RestfullAPI.DbOperations;
+﻿using AutoMapper;
+using RestfullAPI.DbOperations;
 using RestfullAPI.Entities;
 
 namespace RestfullAPI.BookOperations.Commands.CreateBook
@@ -8,10 +9,12 @@ namespace RestfullAPI.BookOperations.Commands.CreateBook
         public CreateBookModel Model { get; set; }
 
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateBookCommand(BookStoreDbContext context)
+        public CreateBookCommand(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public void Handle()
@@ -22,11 +25,9 @@ namespace RestfullAPI.BookOperations.Commands.CreateBook
                 throw new InvalidOperationException("Kitap mevcut");
 
             }
-            book = new Books();
-            book.Title = Model.Title;
-            book.PageCount = Model.PageCount;
-            book.GenreId = Model.GenreId;
-            book.PublishDate = Model.PublishDate;
+  
+
+            book = _mapper.Map<Books>(Model);
 
             _context.Books.Add(book);
             _context.SaveChanges();
@@ -37,7 +38,8 @@ namespace RestfullAPI.BookOperations.Commands.CreateBook
             public string Title { get; set; }
             public int PageCount { get; set; }
             public int GenreId { get; set; }
-            public DateTime PublishDate { get; set; }
+            public int AuthorId { get; set; }
+            public string PublishDate { get; set; }
         }
     }
 }

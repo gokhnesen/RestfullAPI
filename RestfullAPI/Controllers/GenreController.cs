@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestfullAPI.BookOperations.Commands.GetBook;
@@ -16,17 +17,19 @@ namespace RestfullAPI.Controllers
     public class GenreController : ControllerBase
     {
         private readonly BookStoreDbContext _context;
+        private readonly IMapper _mapper;
 
 
-        public GenreController(BookStoreDbContext context)
+        public GenreController(BookStoreDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public ActionResult GetGenre()
         {
-            GetGenresQuery query = new GetGenresQuery(_context);
+            GetGenresQuery query = new GetGenresQuery(_context,_mapper);
             var obj = query.Handle();
             return Ok(obj);
         }
@@ -37,8 +40,10 @@ namespace RestfullAPI.Controllers
             GenresDetailViewModel result;
 
 
-            GetGenresDetailQuery query = new GetGenresDetailQuery(_context);
+            GetGenresDetailQuery query = new GetGenresDetailQuery(_context,_mapper);
             query.GenreId = genreId;
+            GetGenreDetailQueryValidator validator = new GetGenreDetailQueryValidator();
+            validator.ValidateAndThrow(query);
             result = query.Handle();
 
 
@@ -49,7 +54,7 @@ namespace RestfullAPI.Controllers
         [HttpPost]
         public IActionResult AddGenre([FromBody]CreateGenreModel request)
         {
-            CreateGenreCommand command = new CreateGenreCommand(_context);
+            CreateGenreCommand command = new CreateGenreCommand(_context, _mapper);
             command.Model = request;
 
             CreateGenreCommandValidator validator = new CreateGenreCommandValidator();
