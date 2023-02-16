@@ -10,9 +10,9 @@ namespace RestfullAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly BookStoreDbContext _context;
+        private readonly IBookStoreDbContext _context;
 
-        public UserController(BookStoreDbContext context)
+        public UserController(IBookStoreDbContext context)
         {
             _context = context;
         }

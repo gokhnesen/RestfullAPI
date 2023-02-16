@@ -38,6 +38,7 @@ namespace API
             });
 
             services.AddDbContext<BookStoreDbContext>(options => options.UseInMemoryDatabase(databaseName: "BookStoreDB"));
+            services.AddScoped<IBookStoreDbContext, BookStoreDbContext>(provider =>provider.GetService<BookStoreDbContext>());
             var serviceProvider=services.BuildServiceProvider();
             services.AddHttpLogging(httpLogging =>
             {

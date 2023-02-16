@@ -6,11 +6,11 @@ namespace RestfullAPI.Operations.AuthorOperations.GetAuthor
 {
     public class GetAuthorDetailQuery
     {
-        private readonly BookStoreDbContext _context;
+        private readonly IBookStoreDbContext _context;
         private readonly IMapper _mapper;
         public int AuthorId { get; set; }
 
-        public GetAuthorDetailQuery(BookStoreDbContext context, IMapper mapper)
+        public GetAuthorDetailQuery(IBookStoreDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

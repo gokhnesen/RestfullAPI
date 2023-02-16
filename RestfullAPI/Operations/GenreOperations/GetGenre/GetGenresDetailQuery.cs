@@ -5,11 +5,11 @@ namespace RestfullAPI.Operations.GenreOperations.GetGenre
 {
     public class GetGenresDetailQuery
     {
-        private readonly BookStoreDbContext _context;
+        private readonly IBookStoreDbContext _context;
         private readonly IMapper _mapper;
         public int GenreId { get; set; }
 
-        public GetGenresDetailQuery(BookStoreDbContext context,IMapper mapper)
+        public GetGenresDetailQuery(IBookStoreDbContext context,IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

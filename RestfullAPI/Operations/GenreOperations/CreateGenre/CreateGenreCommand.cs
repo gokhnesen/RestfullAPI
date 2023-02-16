@@ -6,10 +6,10 @@ namespace RestfullAPI.Operations.GenreOperations.CreateGenre
 {
     public class CreateGenreCommand
     {
-        private readonly BookStoreDbContext _context;
+        private readonly IBookStoreDbContext _context;
         private readonly IMapper _mapper;
         public CreateGenreModel Model { get; set; }
-        public CreateGenreCommand(BookStoreDbContext context,IMapper mapper)
+        public CreateGenreCommand(IBookStoreDbContext context,IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
