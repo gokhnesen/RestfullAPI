@@ -14,7 +14,7 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.DeleteAuthor
         [Theory]
         [InlineData(0)]
      
-        public void WhenInvalidInputsAreGiven_Validator_ShoudlBeReturnErrors(int authorId)
+        public void WhenInvalidInputsAreGiven_Validator_ShouldBeReturnErrors(int authorId)
         {
             DeleteAuthorCommand command = new DeleteAuthorCommand(null);
             command.AuthorId = authorId;
@@ -25,7 +25,7 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.DeleteAuthor
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
-        public void WhenValidInputAreGiven_Validator_ShouldNotBeReturnError(int authorId)
+        public void WhenValidInputsAreGiven_Validator_ShouldNotBeReturnError(int authorId)
         {
             DeleteAuthorCommand command = new DeleteAuthorCommand(null);
             command.AuthorId = authorId;

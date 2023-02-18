@@ -38,7 +38,12 @@ namespace RestfullApi.UnitTest.Application.BookOperations.UpdateBook
         {
             //arrange
             UpdateBookCommand command = new UpdateBookCommand(_context);
-            UpdateBookModel model = new UpdateBookModel() { Title = "Hobbit", PageCount = 1000, GenreId = 1 };
+            UpdateBookModel model = new UpdateBookModel() 
+            { 
+                Title = "Hobbit", 
+                PageCount = 1000, 
+                GenreId = 1 
+            };
             command.Model = model;
             //act
             FluentActions.Invoking(() => command.Handle()).Invoke();

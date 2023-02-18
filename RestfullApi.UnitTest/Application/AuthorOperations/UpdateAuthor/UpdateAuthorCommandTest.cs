@@ -18,14 +18,14 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.UpdateAuthor
             _context = testFixture.Context;
         }
         [Fact]
-        public void WhenNotExistAuthortIDIsGiven_InvalidOperationException_ShouldBeReturn()
+        public void WhenNotExistAuthortIdIsGiven_InvalidOperationException_ShouldBeReturn()
         {
             UpdateAuthorCommand command = new UpdateAuthorCommand(_context);
             command.AuthorId = 0;
             FluentActions
                 .Invoking(() => command.Handle())
                 .Should().Throw<InvalidOperationException>()
-                .And.Message.Should().Be("Yazar Bulunamadı");
+                .And.Message.Should().Be("Yazar bulunamadı");
         }
         [Fact]
         public void WhenValidInputAreGiven_Author_ShouldBeUpdated()

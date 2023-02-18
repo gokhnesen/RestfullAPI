@@ -26,12 +26,22 @@ namespace RestfullApi.UnitTest.Application.BookOperations.CreateBook
         public void WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn()
         {
             //arrange(HAZIRLIK)
-            var book = new Books() { Title = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", PageCount = 100, PublishDate = new DateTime(1990, 01, 10), GenreId = 1, AuthorId = 1 };
+            var book = new Books() 
+            { 
+                Title = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", 
+                PageCount = 100, 
+                PublishDate = new DateTime(1990, 01, 10), 
+                GenreId = 1, 
+                AuthorId = 1 
+            };
             _context.Books.Add(book);
             _context.SaveChanges();
 
             CreateBookCommand command = new CreateBookCommand(_context, _mapper);
-            command.Model = new CreateBookModel() { Title = book.Title };
+            command.Model = new CreateBookModel() 
+            { 
+                Title = book.Title 
+            };
             //act & assert(Çalıştırma)
             FluentActions.Invoking(() => command.Handle())
                 .Should().Throw<InvalidOperationException>().And.Message.Should().Be("Kitap mevcut");
@@ -42,7 +52,13 @@ namespace RestfullApi.UnitTest.Application.BookOperations.CreateBook
         {
             //arrange
             CreateBookCommand command = new CreateBookCommand(_context, _mapper);
-            CreateBookModel model = new CreateBookModel() { Title = "Hobbit", PageCount = 1000, PublishDate = DateTime.Now.Date.AddYears(-10).ToString(), GenreId = 1 };
+            CreateBookModel model = new CreateBookModel() 
+            { 
+                Title = "Hobbit", 
+                PageCount = 1000,
+                PublishDate = DateTime.Now.Date.AddYears(-10).ToString(), 
+                GenreId = 1
+            };
             command.Model = model;
             //act
             FluentActions.Invoking(() => command.Handle()).Invoke();

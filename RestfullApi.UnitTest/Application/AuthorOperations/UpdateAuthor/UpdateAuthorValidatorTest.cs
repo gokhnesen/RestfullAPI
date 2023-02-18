@@ -13,7 +13,7 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.UpdateAuthor
     {
         [Theory]
         [InlineData("", "")]
-        public void WhenInvalidInputAreGiven_Validator_ShoudlBeReturnErrors(string name, string surname)
+        public void WhenInvalidInputAreGiven_Validator_ShouldBeReturnErrors(string name, string surname)
         {
             UpdateAuthorCommand command = new UpdateAuthorCommand(null);
             command.Model = new UpdateAuthorModel() 
@@ -47,8 +47,8 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.UpdateAuthor
             command.AuthorId = 2;
             command.Model = new UpdateAuthorModel() 
             { 
-                Name = "Andrzej", 
-                Surname = "Sapkowski", 
+                Name = "Sabahattin", 
+                Surname = "Ali", 
                 DateOfBirth = new DateTime(1946, 06, 21) 
             };
             UpdateAuthorValidator validator = new UpdateAuthorValidator();

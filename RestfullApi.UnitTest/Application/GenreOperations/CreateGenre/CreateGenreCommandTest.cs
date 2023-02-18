@@ -27,7 +27,11 @@ namespace RestfullApi.UnitTest.Application.GenreOperations.CreateGenre
         public void WhenAlreadyExistGenreNameIsGiven_InvalidOperationException_ShouldBeReturn()
         {
             //arrange(HAZIRLIK)
-            var genre = new Genre() { Name = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", IsActive=true};
+            var genre = new Genre()
+            { 
+                Name = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", 
+                IsActive=true
+            };
             _context.Genres.Add(genre);
             _context.SaveChanges();
 
@@ -43,7 +47,10 @@ namespace RestfullApi.UnitTest.Application.GenreOperations.CreateGenre
         {
             //arrange
             CreateGenreCommand command = new CreateGenreCommand(_context, _mapper);
-            CreateGenreModel model = new CreateGenreModel() { Name = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn"};
+            CreateGenreModel model = new CreateGenreModel()
+            {
+                Name = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn"
+            };
             command.Model = model;
             //act
             FluentActions.Invoking(() => command.Handle()).Invoke();
