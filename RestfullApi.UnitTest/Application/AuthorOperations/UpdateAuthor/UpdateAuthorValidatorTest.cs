@@ -32,8 +32,8 @@ namespace RestfullApi.UnitTest.Application.AuthorOperations.UpdateAuthor
             UpdateAuthorCommand command = new UpdateAuthorCommand(null);
             command.Model = new UpdateAuthorModel() 
             { 
-                Name = "Andrzej", 
-                Surname = "Sapkowski", 
+                Name = "Sabahattin", 
+                Surname = "Ali", 
                 DateOfBirth = DateTime.Now.Date 
             };
             UpdateAuthorValidator validator = new UpdateAuthorValidator();
