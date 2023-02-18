@@ -30,8 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\AuthorOperations\" />
-    <Folder Include="Application\GenreOperations\" />
+    <Folder Include="Application\BookOperations\GetBook\" />
   </ItemGroup>
 
 </Project>

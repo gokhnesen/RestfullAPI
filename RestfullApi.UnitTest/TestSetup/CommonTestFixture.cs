@@ -21,6 +21,7 @@ namespace RestfullApi.UnitTest.TestSetup
             Context.Database.EnsureCreated();
             Context.AddGenres();
             Context.AddBooks();
+            
 
             Mapper = new MapperConfiguration(config => { config.AddProfile<MappingProfile>(); }).CreateMapper();
 

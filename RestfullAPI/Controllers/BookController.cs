@@ -84,8 +84,8 @@ namespace RestfullAPI.Controllers
         public async Task<IActionResult> DeleteBook(int bookId)
         {
 
-           
-                DeleteBookCommand command = new DeleteBookCommand(_context);
+
+            DeleteBookCommand command = new DeleteBookCommand(_context);
                 command.BookId = bookId;
                 DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
                 validator.ValidateAndThrow(command);

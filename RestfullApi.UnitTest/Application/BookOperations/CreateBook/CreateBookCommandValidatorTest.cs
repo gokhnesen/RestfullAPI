@@ -11,16 +11,16 @@ using System.Text;
 using System.Threading.Tasks;
 using static RestfullAPI.BookOperations.Commands.CreateBook.CreateBookCommand;
 
-namespace RestfullApi.UnitTest.Application.BookOperations
+namespace RestfullApi.UnitTest.Application.BookOperations.CreateBook
 {
     public class CreateBookCommandValidatorTest : IClassFixture<CommonTestFixture>
     {
 
         [Theory]
-        [InlineData("Dune",0,"1",0)]
-        [InlineData("", 0, "0", 0)]
+        [InlineData("Dune", 0, "1", 0,0)]
+        [InlineData("", 0, "0", 0,0)]
 
-        public void WhenInvalidInputAreGiven_Validator_ShouldBeReturnErrors(string title,int pageCount,string PublishDate,int genreId)
+        public void WhenInvalidInputAreGiven_Validator_ShouldBeReturnErrors(string title, int pageCount, string PublishDate, int genreId,int authorId)
         {
             //arrange
             CreateBookCommand command = new CreateBookCommand(null, null);
@@ -29,7 +29,8 @@ namespace RestfullApi.UnitTest.Application.BookOperations
                 Title = title,
                 PageCount = pageCount,
                 PublishDate = DateTime.Now.Date.AddYears(-1).ToString(),
-                GenreId = genreId
+                GenreId = genreId,
+                AuthorId=authorId
             };
             //act
             CreateBookCommandValidator validator = new CreateBookCommandValidator();
@@ -48,7 +49,8 @@ namespace RestfullApi.UnitTest.Application.BookOperations
                 Title = "Dune",
                 PageCount = 1000,
                 PublishDate = DateTime.Now.Date.ToString(),
-                GenreId = 1
+                GenreId = 1,
+                AuthorId = 1
             };
             CreateBookCommandValidator validator = new CreateBookCommandValidator();
             var result = validator.Validate(command);
@@ -70,6 +72,6 @@ namespace RestfullApi.UnitTest.Application.BookOperations
             var result = validator.Validate(command);
             result.Errors.Count.Should().Be(0);
         }
-     
+
     }
 }

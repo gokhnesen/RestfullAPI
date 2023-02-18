@@ -11,9 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static RestfullAPI.BookOperations.Commands.CreateBook.CreateBookCommand;
 
-namespace RestfullApi.UnitTest.Application.BookOperations
+namespace RestfullApi.UnitTest.Application.BookOperations.CreateBook
 {
-    public class CreateBookCommandTests : IClassFixture<CommonTestFixture> 
+    public class CreateBookCommandTests : IClassFixture<CommonTestFixture>
     {
         private readonly BookStoreDbContext _context;
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace RestfullApi.UnitTest.Application.BookOperations
         public void WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn()
         {
             //arrange(HAZIRLIK)
-            var book = new Books(){ Title= "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", PageCount=100,PublishDate=new DateTime(1990,01,10),GenreId=1,AuthorId=1};
+            var book = new Books() { Title = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", PageCount = 100, PublishDate = new DateTime(1990, 01, 10), GenreId = 1, AuthorId = 1 };
             _context.Books.Add(book);
             _context.SaveChanges();
 
@@ -47,7 +47,7 @@ namespace RestfullApi.UnitTest.Application.BookOperations
             //act
             FluentActions.Invoking(() => command.Handle()).Invoke();
             //assert
-            var book = _context.Books.SingleOrDefault(book=>book.Title == model.Title);
+            var book = _context.Books.SingleOrDefault(book => book.Title == model.Title);
             book.Should().NotBeNull();
             book.PageCount.Should().Be(model.PageCount);
             book.PublishDate.ToString().Should().Be(model.PublishDate);
