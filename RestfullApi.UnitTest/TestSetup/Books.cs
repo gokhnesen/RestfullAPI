@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace RestfullApi.UnitTest.TestSetup
 {
-    public static class Book
+    public static class Books
     {
         public static void AddBooks(this BookStoreDbContext context)
         {
             context.Books.AddRange(
-      new Books
+      new Book
       {
           Title = "Lean Startup",
           GenreId = 1,
@@ -21,7 +21,7 @@ namespace RestfullApi.UnitTest.TestSetup
           PageCount = 200,
           PublishDate = new DateTime(2001, 06, 12)
       },
-      new Books
+      new Book
       {
           Title = "Herland",
           GenreId = 2,
@@ -29,7 +29,7 @@ namespace RestfullApi.UnitTest.TestSetup
           PageCount = 250,
           PublishDate = new DateTime(2010, 05, 23)
       },
-      new Books
+      new Book
       {
           Title = "Dune",
           GenreId = 2,

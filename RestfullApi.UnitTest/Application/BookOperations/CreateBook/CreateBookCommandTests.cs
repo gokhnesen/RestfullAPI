@@ -26,7 +26,7 @@ namespace RestfullApi.UnitTest.Application.BookOperations.CreateBook
         public void WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn()
         {
             //arrange(HAZIRLIK)
-            var book = new Books() 
+            var book = new Book() 
             { 
                 Title = "Test_WhenAlreadyExistBookTitleIsGiven_InvalidOperationException_ShouldBeReturn", 
                 PageCount = 100, 

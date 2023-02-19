@@ -14,7 +14,7 @@ namespace RestfullAPI.DbOperations.DataSeed
                     return;
                 }
                 context.Books.AddRange(
-                new Books
+                new Book
                 {
                     Title = "Lean Startup",
                     GenreId = 1,
@@ -22,7 +22,7 @@ namespace RestfullAPI.DbOperations.DataSeed
                     PageCount = 200,
                     PublishDate = new DateTime(2001, 06, 12)
                 },
-                new Books
+                new Book
                 {
                     Title = "Herland",
                     GenreId = 2,
@@ -30,7 +30,7 @@ namespace RestfullAPI.DbOperations.DataSeed
                     PageCount = 250,
                     PublishDate = new DateTime(2010, 05, 23)
                 },
-                new Books
+                new Book
                 {
                     Title = "Dune",
                     GenreId = 2,

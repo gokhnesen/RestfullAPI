@@ -15,11 +15,11 @@ namespace RestfullAPI.Common
     {
         public MappingProfile()
         {
-            CreateMap<CreateBookModel, Books>();
+            CreateMap<CreateBookModel, Book>();
             CreateMap<CreateGenreModel,Genre>();
             CreateMap<CreateAuthorModel,Author>();
-            CreateMap<Books, BookDetailViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name)).ForMember(dest=>dest.Author,opt=>opt.MapFrom(src=>src.Author.Name+" "+src.Author.Surname));
-            CreateMap<Books, BooksViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name)).ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.Name+" "+src.Author.Surname));
+            CreateMap<Book, BookDetailViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name)).ForMember(dest=>dest.Author,opt=>opt.MapFrom(src=>src.Author.Name+" "+src.Author.Surname));
+            CreateMap<Book, BooksViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name)).ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.Name+" "+src.Author.Surname));
             CreateMap<Genre, GenresViewModel>();
             CreateMap<Genre, GenresDetailViewModel>();
             CreateMap<Author, AuthorDetailViewModel>();

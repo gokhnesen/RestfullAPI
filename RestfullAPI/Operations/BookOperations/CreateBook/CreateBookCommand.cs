@@ -27,7 +27,7 @@ namespace RestfullAPI.BookOperations.Commands.CreateBook
             }
   
 
-            book = _mapper.Map<Books>(Model);
+            book = _mapper.Map<Book>(Model);
 
             _context.Books.Add(book);
             _context.SaveChanges();

@@ -2,7 +2,7 @@
 
 namespace RestfullAPI.Entities
 {
-    public class Books
+    public class Book
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
